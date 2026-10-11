@@ -1,5 +1,5 @@
 import type { NewOf, Repo } from '@anvil/entity';
-import type { RepoStore, RequestContext } from '@anvil/usecase';
+import type { RepoFields, RepoStore, RequestContext } from '@anvil/usecase';
 import { fromBool, type Row, toBool } from './row';
 import type { SqliteDatabase } from './sqlite-database';
 
@@ -34,6 +34,18 @@ export class SqliteRepoStore implements RepoStore {
     return this.database.access(ctx, (db) => {
       const row = db.prepare('SELECT * FROM repos WHERE path = ?').get(path) as Row | undefined;
       return row ? toRepo(row) : null;
+    });
+  }
+
+  update(ctx: RequestContext, id: number, fields: RepoFields): Promise<Repo> {
+    return this.database.access(ctx, (db) => {
+      db.prepare('UPDATE repos SET path = ?, default_branch = ?, has_remote = ? WHERE id = ?').run(
+        fields.path,
+        fields.defaultBranch,
+        fromBool(fields.hasRemote),
+        id,
+      );
+      return toRepo(db.prepare('SELECT * FROM repos WHERE id = ?').get(id) as Row);
     });
   }
 

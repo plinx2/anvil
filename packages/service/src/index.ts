@@ -53,6 +53,7 @@ export * from './input/save-reflection-input';
 export * from './input/set-auto-gate-input';
 export * from './input/start-agent-input';
 export * from './input/start-ticket-input';
+export * from './input/update-repo-input';
 export * from './input/update-ticket-input';
 export * from './operations';
 // 出力(操作ごと)
@@ -87,6 +88,7 @@ export * from './output/save-reflection-output';
 export * from './output/set-auto-gate-output';
 export * from './output/start-agent-output';
 export * from './output/start-ticket-output';
+export * from './output/update-repo-output';
 export * from './output/update-ticket-output';
 // サービス
 export * from './services/dashboard-service';

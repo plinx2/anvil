@@ -155,6 +155,7 @@ describe('MCP(HTTP)', () => {
         'anvil_pass_pre_impl_gate',
         'anvil_pass_pre_done_gate',
         'anvil_create_project',
+        'anvil_update_repo',
       ]) {
         expect(agentTools).not.toContain(forbidden); // ゲートの判断と、プロジェクトの管理は、エージェントにさせない
       }

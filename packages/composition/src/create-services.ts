@@ -39,7 +39,7 @@ export function createServices(u: AnvilUseCases): AnvilService {
     flags: new FlagService(u.askQuestion, u.answerQuestion),
     intakes: new IntakeService(u.requestIntake, u.getIntake),
     reflections: new ReflectionService(u.saveReflection, u.listReflections, u.decideReflection),
-    projects: new ProjectService(u.createProject, u.deleteProject, u.addRepo, u.listProjects, u.getContextPages),
+    projects: new ProjectService(u.createProject, u.deleteProject, u.addRepo, u.updateRepo, u.listProjects, u.getContextPages),
     dashboard: new DashboardService(u.getDashboard),
   };
 }

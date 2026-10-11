@@ -453,6 +453,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/projects/{projectId}/repos/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** リポジトリの更新 */
+        patch: operations["updateRepo"];
+        trace?: never;
+    };
     "/api/projects/{projectId}/context": {
         parameters: {
             query?: never;
@@ -3269,6 +3286,94 @@ export interface operations {
         };
         responses: {
             /** @description 登録後の、プロジェクトのリポジトリ一覧 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        repos: {
+                            id: number;
+                            projectId: number;
+                            name: string;
+                            path: string;
+                            defaultBranch: string;
+                            hasRemote: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description 入力が不正 */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                        code: string;
+                    };
+                };
+            };
+            /** @description 権限が無い(担当でないロール、人間だけの操作) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                        code: string;
+                    };
+                };
+            };
+            /** @description 見つからない */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                        code: string;
+                    };
+                };
+            };
+            /** @description 今はできない(状態、依存、重複、承認待ちなど) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                        code: string;
+                    };
+                };
+            };
+        };
+    };
+    updateRepo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    defaultBranch?: string;
+                    hasRemote?: boolean;
+                    path?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 更新後の、プロジェクトのリポジトリ一覧 */
             200: {
                 headers: {
                     [name: string]: unknown;

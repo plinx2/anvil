@@ -32,6 +32,7 @@ import { registerSaveReflectionTool } from './save-reflection-tool';
 import { registerSetAutoGateTool } from './set-auto-gate-tool';
 import { registerStartAgentTool } from './start-agent-tool';
 import { registerStartTool } from './start-tool';
+import { registerUpdateRepoTool } from './update-repo-tool';
 import { registerUpdateTicketTool } from './update-ticket-tool';
 
 /** MCP のツールの一覧。ここに載っているものだけが、公開される。結びつきに応じて、出すツールが変わる。 */
@@ -59,6 +60,7 @@ export function registerTools(server: McpServer, service: AnvilService, binding:
     registerCreateProjectTool(server, service, binding);
     registerListProjectsTool(server, service, binding);
     registerAddRepoTool(server, service, binding);
+    registerUpdateRepoTool(server, service, binding);
     registerGetContextPagesTool(server, service, binding);
     registerDashboardTool(server, service, binding);
     registerDiscardTicketTool(server, service, binding);
