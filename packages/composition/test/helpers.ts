@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { Actor, type Role } from '@anvil/entity';
+import { Actor, Role } from '@anvil/entity';
 import { newRequestContext, type RequestContext } from '@anvil/usecase';
 import { createAnvil } from '../src';
 
@@ -61,4 +61,29 @@ export async function setup(options: { remote?: boolean } = {}) {
     notifier: fakes.notifier!,
     idle: () => anvil.tasks.idle(),
   };
+}
+
+export type Env = Awaited<ReturnType<typeof setup>>;
+
+/** 設計前ゲートからブランチを切り、ワークツリーでファイルをコミットして、完了前ゲートまで進める。ワークツリーの場所を返す */
+export async function workUntilDoneGate(env: Env, slug: string, file: string, content: string) {
+  const { s, project } = env;
+  const { ticket: t } = await s.tickets.create(human, {
+    projectId: project.id,
+    title: slug,
+    slug,
+    state: 'pre_design_gate',
+    designNeeded: false,
+    targetRepos: ['app'],
+  });
+  await s.flow.passDesignGate(human, { ticketId: t.id, sp: 1 });
+  const worktree = (await s.tickets.detail(human, { ticketId: t.id })).detail.branches[0]?.worktreePath ?? '';
+  fs.writeFileSync(path.join(worktree, file), content);
+  git(worktree, 'add', '.');
+  git(worktree, 'commit', '-m', `add ${file}`);
+  for (const role of [Role.FUNC_DESIGNER, Role.QA]) await s.flow.advance(asRole(role), { ticketId: t.id });
+  await s.flow.passImplGate(human, { ticketId: t.id });
+  for (const role of [Role.CODER, Role.FUNC_VERIFIER, Role.REVIEWER]) await s.flow.advance(asRole(role), { ticketId: t.id });
+  await env.idle();
+  return { ticketId: t.id, worktree };
 }

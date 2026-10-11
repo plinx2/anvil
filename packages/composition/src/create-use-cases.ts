@@ -92,7 +92,7 @@ export function createUseCases(p: AnvilPorts) {
 
   // ---------- ブランチ、PR、完了 ----------
   const cutBranches = new CutBranches(p.branches, p.repos, p.git, p.workspace, findProject);
-  const cleanUpWorktrees = new CleanUpWorktrees(p.branches, p.repos, p.git, p.notifier);
+  const cleanUpWorktrees = new CleanUpWorktrees(p.branches, p.repos, p.git, p.pullRequests, p.notifier);
   const ensurePullRequest = new EnsurePullRequest(p.tickets, p.repos, p.entries, p.pullRequests, findTicket);
   const notifyDependents = new NotifyDependents(p.notifier, listDependents, listUnmetDependencies, ensureAgent);
 

@@ -1,33 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Role } from '@anvil/entity';
 import { describe, expect, it } from 'vitest';
-import { asRole, branchExists, git, human, setup } from './helpers';
-
-type Env = Awaited<ReturnType<typeof setup>>;
-
-/** 設計前ゲートからブランチを切り、ワークツリーでファイルをコミットして、完了前ゲートまで進める。ワークツリーの場所を返す */
-async function workUntilDoneGate(env: Env, slug: string, file: string, content: string) {
-  const { s, project } = env;
-  const { ticket: t } = await s.tickets.create(human, {
-    projectId: project.id,
-    title: slug,
-    slug,
-    state: 'pre_design_gate',
-    designNeeded: false,
-    targetRepos: ['app'],
-  });
-  await s.flow.passDesignGate(human, { ticketId: t.id, sp: 1 });
-  const worktree = (await s.tickets.detail(human, { ticketId: t.id })).detail.branches[0]?.worktreePath ?? '';
-  fs.writeFileSync(path.join(worktree, file), content);
-  git(worktree, 'add', '.');
-  git(worktree, 'commit', '-m', `add ${file}`);
-  for (const role of [Role.FUNC_DESIGNER, Role.QA]) await s.flow.advance(asRole(role), { ticketId: t.id });
-  await s.flow.passImplGate(human, { ticketId: t.id });
-  for (const role of [Role.CODER, Role.FUNC_VERIFIER, Role.REVIEWER]) await s.flow.advance(asRole(role), { ticketId: t.id });
-  await env.idle();
-  return { ticketId: t.id, worktree };
-}
+import { branchExists, git, human, setup, workUntilDoneGate } from './helpers';
 
 describe('完了時の、元のリポジトリへの反映', () => {
   it('リモートが無い: ワークツリーを消し、ベースブランチへ取り込んで、作業ブランチを削除する', async () => {
@@ -105,7 +79,7 @@ describe('完了時の、元のリポジトリへの反映', () => {
     await env.s.flow.passDoneGate(human, { ticketId });
 
     expect(fs.readFileSync(path.join(env.repo, 'merged.txt'), 'utf8')).toBe('merged');
-    expect(branchExists(env.repo, 'feat/r')).toBe(true);
-    expect(env.notifier.notifications).toEqual([]);
+    expect(branchExists(env.repo, 'feat/r')).toBe(true); // PR の状態が分からないので、消さない
+    expect(env.notifier.notifications.at(-1)?.body).toContain('feat/r');
   });
 });

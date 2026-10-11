@@ -26,4 +26,10 @@ export interface GitPort {
   integrateBranch(ctx: RequestContext, repoPath: string, base: string, branch: string): Promise<GitOutcome>;
   /** リモートがあるとき(PR でマージされた後): 元のリポジトリのベースブランチを pull する(早送りだけ。コンフリクトの解決はしない) */
   pullBase(ctx: RequestContext, repoPath: string, base: string): Promise<GitOutcome>;
+  /** ローカルブランチの先頭コミットの SHA(完全な長さ)。ブランチが無ければ null */
+  getBranchHead(ctx: RequestContext, repoPath: string, branch: string): Promise<string | null>;
+  /** ローカルブランチを、マージ済みかどうかによらず削除する(呼ぶ側が、消してよいと確かめてから呼ぶ)。失敗は例外 */
+  deleteLocalBranch(ctx: RequestContext, repoPath: string, branch: string): Promise<void>;
+  /** `origin` のブランチを削除する。既に無ければ、何もせず成功。失敗は例外 */
+  deleteRemoteBranch(ctx: RequestContext, repoPath: string, branch: string): Promise<void>;
 }

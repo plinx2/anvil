@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import type { PullRequestBodyWriter, PullRequestPort, PullRequestRequest, RequestContext } from '@anvil/usecase';
+import type { PullRequestBodyWriter, PullRequestPort, PullRequestRequest, PullRequestState, RequestContext } from '@anvil/usecase';
 
 const run = promisify(execFile);
 
@@ -30,5 +30,17 @@ export class GhCliPullRequests implements PullRequestPort {
       options,
     );
     return stdout.trim().split(/\s+/).pop() ?? '';
+  }
+
+  async getState(_ctx: RequestContext, prUrl: string): Promise<PullRequestState> {
+    const { stdout } = await run(this.gh.bin, [...this.gh.args, 'pr', 'view', prUrl, '--json', 'state,headRefOid'], {
+      windowsHide: true,
+      maxBuffer: 16 * 1024 * 1024,
+    });
+    const parsed = JSON.parse(stdout) as { state?: unknown; headRefOid?: unknown };
+    if (typeof parsed.state !== 'string' || typeof parsed.headRefOid !== 'string') {
+      throw new Error(`gh pr view の出力に state と headRefOid が無い: ${stdout.trim()}`);
+    }
+    return { state: parsed.state, headRefOid: parsed.headRefOid };
   }
 }

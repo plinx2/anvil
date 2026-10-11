@@ -79,6 +79,25 @@ export class GitCli implements GitPort {
     return { ok: true };
   }
 
+  async getBranchHead(_ctx: RequestContext, repoPath: string, branch: string): Promise<string | null> {
+    try {
+      return await this.git(repoPath, ['rev-parse', '--verify', '--quiet', `refs/heads/${branch}`]);
+    } catch {
+      return null;
+    }
+  }
+
+  async deleteLocalBranch(_ctx: RequestContext, repoPath: string, branch: string): Promise<void> {
+    await this.git(repoPath, ['branch', '-D', branch]);
+  }
+
+  async deleteRemoteBranch(_ctx: RequestContext, repoPath: string, branch: string): Promise<void> {
+    // 既に無い(GitHub の自動削除など)ときは成功。エラー文言はロケールで変わるので、先に存在を確かめる
+    const remote = await this.git(repoPath, ['ls-remote', '--heads', 'origin', `refs/heads/${branch}`]);
+    if (remote === '') return;
+    await this.git(repoPath, ['push', 'origin', '--delete', branch]);
+  }
+
   /** 元のリポジトリを、勝手に動かしてよい状態か。よくないなら、その理由 */
   private async baseNotReady(repoPath: string, base: string): Promise<string | null> {
     const current = await this.git(repoPath, ['rev-parse', '--abbrev-ref', 'HEAD']).catch(() => '');
