@@ -5,12 +5,12 @@ describe('anvilConfigFromEnv(環境変数から設定を作る)', () => {
   const config = (env: Record<string, string>) =>
     anvilConfigFromEnv({ ANVIL_HOME: '/tmp/anvil-home', ANVIL_AGENTS_DIR: '/tmp/agents', ...env });
 
-  it('既定: エージェントは herdr + Claude Code、専用の herdr セッション anvil、PR は何もしない', () => {
+  it('既定: エージェントは herdr + Claude Code、専用の herdr セッション anvil、PR は gh で作る', () => {
     const c = config({});
 
     expect(c.agent).toBe('herdr-claude-cli');
     expect(c.herdrSession).toBe('anvil');
-    expect(c.pullRequests).toBe('noop');
+    expect(c.pullRequests).toBe('gh-cli');
     expect(c.mcpUrl).toBe('http://127.0.0.1:4731/mcp');
     expect(c.agentsDir).toBe('/tmp/agents');
   });
@@ -27,9 +27,10 @@ describe('anvilConfigFromEnv(環境変数から設定を作る)', () => {
     expect(config({ ANVIL_HERDR_SESSION: 'default' }).herdrSession).toBe('default');
   });
 
-  it('PR は gh-cli を指定したときだけ作る。MCP のポートは変えられる', () => {
+  it('ANVIL_PULL_REQUESTS=noop だけが、PR を作らない構成。MCP のポートは変えられる', () => {
+    expect(config({ ANVIL_PULL_REQUESTS: 'noop' }).pullRequests).toBe('noop');
     expect(config({ ANVIL_PULL_REQUESTS: 'gh-cli' }).pullRequests).toBe('gh-cli');
-    expect(config({ ANVIL_PULL_REQUESTS: 'x' }).pullRequests).toBe('noop');
+    expect(config({ ANVIL_PULL_REQUESTS: 'typo' }).pullRequests).toBe('gh-cli');
     expect(config({ ANVIL_MCP_PORT: '5000' }).mcpUrl).toBe('http://127.0.0.1:5000/mcp');
     expect(config({ ANVIL_MCP_URL: 'http://h:1/mcp' }).mcpUrl).toBe('http://h:1/mcp');
   });

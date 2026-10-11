@@ -43,7 +43,7 @@ corepack pnpm anvil board  # サーバーを使わずに、コマンドで直接
 |---|---|---|
 | `ANVIL_HOME` | データ領域(DB、ワークツリー、プロジェクトコンテキスト、MCP の設定) | Windows: `%LOCALAPPDATA%\anvil` / 他: `~/.local/share/anvil` |
 | `ANVIL_AGENT` | `herdr-claude-cli` で、herdr で Claude Code を実際に動かす(**エージェントを起動する**)。`noop` で何もしない(記録だけ) | `herdr-claude-cli` |
-| `ANVIL_PULL_REQUESTS` | `gh-cli` で、`claude -p` と `gh` で実際に PR を作る | `noop` |
+| `ANVIL_PULL_REQUESTS` | `gh-cli` で、`claude -p` と `gh` で実際に PR を作る(リモートのあるリポジトリだけ)。`noop` で作らない | `gh-cli` |
 | `ANVIL_HTTP_PORT`、`ANVIL_MCP_PORT` | ポート(127.0.0.1 のみ) | 4730、4731 |
 | `ANVIL_GUI_DIR` | GUI のビルドの置き場(HTTP API 単体の起動で使う。`anvil serve` は同梱の `dist/gui` を配信する) | `apps/gui/dist` |
 | `ANVIL_AGENTS_DIR` | ロールの定義とコードの原則がある、エージェントのコンテキスト | `agents` |

@@ -50,7 +50,7 @@ export function anvilConfigFromEnv(env: NodeJS.ProcessEnv = process.env): AnvilC
     mcpUrl: env.ANVIL_MCP_URL ?? `http://127.0.0.1:${env.ANVIL_MCP_PORT ?? 4731}/mcp`,
     agent: env.ANVIL_AGENT === 'noop' ? 'noop' : 'herdr-claude-cli',
     herdrSession: env.ANVIL_HERDR_SESSION || DEFAULT_HERDR_SESSION,
-    pullRequests: env.ANVIL_PULL_REQUESTS === 'gh-cli' ? 'gh-cli' : 'noop',
+    pullRequests: env.ANVIL_PULL_REQUESTS === 'noop' ? 'noop' : 'gh-cli',
     models: DEFAULT_CLAUDE_MODELS,
   };
 }
