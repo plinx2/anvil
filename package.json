@@ -1,0 +1,29 @@
+{
+  "name": "anvil",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.10.1",
+  "description": "AI 開発チームのチケット管理、カンバン、エージェント間の中継",
+  "scripts": {
+    "anvil": "turbo run build --filter=@anvil/cli --output-logs=errors-only && node cli/dist/anvil.mjs",
+    "install:cli": "turbo run build --filter=@anvil/cli --output-logs=errors-only && pnpm install -g ./cli",
+    "start": "turbo run start --filter=@anvil/http-api --filter=@anvil/mcp",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "openapi": "turbo run openapi",
+    "gen:api": "turbo run gen:api",
+    "test:coverage": "pnpm --filter @anvil/composition test:coverage"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "3.2.7",
+    "tsx": "^4.20.0",
+    "turbo": "^2.11.7",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

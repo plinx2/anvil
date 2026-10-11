@@ -1,0 +1,53 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/entity"
+    },
+    {
+      "path": "./packages/usecase"
+    },
+    {
+      "path": "./packages/service"
+    },
+    {
+      "path": "./packages/adapter/sqlite"
+    },
+    {
+      "path": "./packages/adapter/herdr-claude-cli"
+    },
+    {
+      "path": "./packages/adapter/git-cli"
+    },
+    {
+      "path": "./packages/adapter/gh-cli"
+    },
+    {
+      "path": "./packages/adapter/claude-cli"
+    },
+    {
+      "path": "./packages/adapter/fs"
+    },
+    {
+      "path": "./packages/adapter/system"
+    },
+    {
+      "path": "./packages/adapter/noop"
+    },
+    {
+      "path": "./packages/composition"
+    },
+    {
+      "path": "./apps/http-api"
+    },
+    {
+      "path": "./apps/mcp"
+    },
+    {
+      "path": "./cli"
+    },
+    {
+      "path": "./apps/gui"
+    }
+  ]
+}

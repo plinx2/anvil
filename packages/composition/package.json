@@ -1,0 +1,27 @@
+{
+  "name": "@anvil/composition",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@anvil/entity": "workspace:*",
+    "@anvil/usecase": "workspace:*",
+    "@anvil/service": "workspace:*",
+    "@anvil/sqlite": "workspace:*",
+    "@anvil/herdr-claude-cli": "workspace:*",
+    "@anvil/git-cli": "workspace:*",
+    "@anvil/gh-cli": "workspace:*",
+    "@anvil/claude-cli": "workspace:*",
+    "@anvil/fs": "workspace:*",
+    "@anvil/system": "workspace:*",
+    "@anvil/noop": "workspace:*"
+  }
+}

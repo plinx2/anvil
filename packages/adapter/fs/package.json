@@ -1,0 +1,16 @@
+{
+  "name": "@anvil/fs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@anvil/entity": "workspace:*",
+    "@anvil/usecase": "workspace:*"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "./node_modules/.tmp/app",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../../packages/entity/tsconfig.app.json"
+    },
+    {
+      "path": "../../packages/service/tsconfig.app.json"
+    },
+    {
+      "path": "../../packages/composition/tsconfig.app.json"
+    }
+  ]
+}

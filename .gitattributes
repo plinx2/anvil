@@ -1,0 +1,2 @@
+# 改行は LF に固定する(biome の整形が LF 前提。Windows の autocrlf で CRLF にしない)
+* text=auto eol=lf

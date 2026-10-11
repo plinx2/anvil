@@ -1,0 +1,48 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "./node_modules/.tmp/app",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../entity/tsconfig.app.json"
+    },
+    {
+      "path": "../usecase/tsconfig.app.json"
+    },
+    {
+      "path": "../service/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/sqlite/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/herdr-claude-cli/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/git-cli/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/gh-cli/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/claude-cli/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/fs/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/system/tsconfig.app.json"
+    },
+    {
+      "path": "../adapter/noop/tsconfig.app.json"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
+    "test": {
+      "dependsOn": ["^typecheck"],
+      "outputs": []
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "openapi": {
+      "inputs": ["src/**", "../../packages/service/src/**"],
+      "outputs": ["openapi.json"]
+    },
+    "gen:api": {
+      "dependsOn": ["@anvil/http-api#openapi"],
+      "outputs": ["src/api/schema.d.ts"]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

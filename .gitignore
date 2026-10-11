@@ -1,0 +1,34 @@
+# 依存関係
+node_modules
+
+# ビルド成果物
+dist
+*.tsbuildinfo
+
+# turbo のキャッシュとログ
+.turbo
+
+# テストのカバレッジ
+coverage
+
+# SQLite のデータベース
+*.db
+*.db-shm
+*.db-wal
+
+# 環境変数・秘密情報
+.env
+.env.*
+!.env.example
+
+# ログ
+*.log
+
+# OS・エディタ
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Claude Code の個人設定(launch.json などは共有する)
+.claude/settings.local.json
