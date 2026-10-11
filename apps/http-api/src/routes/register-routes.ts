@@ -19,6 +19,7 @@ import { registerCreateProject } from './project/create-project';
 import { registerDeleteProject } from './project/delete-project';
 import { registerGetContextPages } from './project/get-context-pages';
 import { registerListProjects } from './project/list-projects';
+import { registerUpdateRepo } from './project/update-repo';
 import { registerDecideReflection } from './reflection/decide-reflection';
 import { registerListReflections } from './reflection/list-reflections';
 import { registerAddDependency } from './ticket/add-dependency';
@@ -77,5 +78,6 @@ export function registerRoutes(app: HttpApp, service: AnvilService): void {
   registerCreateProject(app, service);
   registerDeleteProject(app, service);
   registerAddRepo(app, service);
+  registerUpdateRepo(app, service);
   registerGetContextPages(app, service);
 }

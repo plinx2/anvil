@@ -1,14 +1,16 @@
-import type { AddRepo, CreateProject, DeleteProject, GetContextPages, ListProjects, RequestContext } from '@anvil/usecase';
+import type { AddRepo, CreateProject, DeleteProject, GetContextPages, ListProjects, RequestContext, UpdateRepo } from '@anvil/usecase';
 import { type AddRepoInput, AddRepoInputSchema } from '../input/add-repo-input';
 import { type CreateProjectInput, CreateProjectInputSchema } from '../input/create-project-input';
 import { type DeleteProjectInput, DeleteProjectInputSchema } from '../input/delete-project-input';
 import { type GetContextPagesInput, GetContextPagesInputSchema } from '../input/get-context-pages-input';
 import { type ListProjectsInput, ListProjectsInputSchema } from '../input/list-projects-input';
+import { type UpdateRepoInput, UpdateRepoInputSchema } from '../input/update-repo-input';
 import { type AddRepoOutput, toAddRepoOutput } from '../output/add-repo-output';
 import { type CreateProjectOutput, toCreateProjectOutput } from '../output/create-project-output';
 import { type DeleteProjectOutput, toDeleteProjectOutput } from '../output/delete-project-output';
 import { type GetContextPagesOutput, toGetContextPagesOutput } from '../output/get-context-pages-output';
 import { type ListProjectsOutput, toListProjectsOutput } from '../output/list-projects-output';
+import { toUpdateRepoOutput, type UpdateRepoOutput } from '../output/update-repo-output';
 
 /** プロジェクトとリポジトリの管理、プロジェクトコンテキストの閲覧。 */
 export class ProjectService {
@@ -16,6 +18,7 @@ export class ProjectService {
     private readonly createProject: CreateProject,
     private readonly deleteProjectOf: DeleteProject,
     private readonly addRepoTo: AddRepo,
+    private readonly updateRepoOf: UpdateRepo,
     private readonly listProjects: ListProjects,
     private readonly getContextPages: GetContextPages,
   ) {}
@@ -35,6 +38,11 @@ export class ProjectService {
   /** リポジトリの登録。登録後の、プロジェクトのリポジトリ一覧を返す。 */
   async addRepo(ctx: RequestContext, input: AddRepoInput): Promise<AddRepoOutput> {
     return toAddRepoOutput(await this.addRepoTo.execute(ctx, AddRepoInputSchema.parse(input)));
+  }
+
+  /** リポジトリの更新(指定した項目だけ)。更新後の、プロジェクトのリポジトリ一覧を返す。 */
+  async updateRepo(ctx: RequestContext, input: UpdateRepoInput): Promise<UpdateRepoOutput> {
+    return toUpdateRepoOutput(await this.updateRepoOf.execute(ctx, UpdateRepoInputSchema.parse(input)));
   }
 
   /** プロジェクトの一覧(リポジトリ、チケットの数つき)。 */

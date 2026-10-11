@@ -52,6 +52,7 @@ export * from './project/delete-project';
 export * from './project/get-context-pages';
 export * from './project/list-projects';
 export * from './project/project-summary';
+export * from './project/update-repo';
 export * from './pull-request/ensure-pull-request';
 // 読み取り
 export * from './query/dashboard';

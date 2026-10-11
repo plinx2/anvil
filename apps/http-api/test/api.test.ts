@@ -54,6 +54,20 @@ describe('HTTP API', () => {
     expect(board.body.tickets[0].category).toBe('refine');
   });
 
+  it('リポジトリを更新できる(指定した項目だけ)。エラーは、コードに応じた状態で返る', async () => {
+    const { request, dir } = setup();
+    const project = await request('POST', '/api/projects', { name: 'demo' });
+    const base = `/api/projects/${project.body.project.id}/repos`;
+    await request('POST', base, { name: 'app', path: dir, hasRemote: true });
+
+    const updated = await request('PATCH', `${base}/app`, { hasRemote: false });
+    expect(updated.status).toBe(200);
+    expect(updated.body.repos[0]).toMatchObject({ name: 'app', path: dir, defaultBranch: 'main', hasRemote: false });
+
+    expect((await request('PATCH', `${base}/app`, {})).status).toBe(400);
+    expect((await request('PATCH', `${base}/zzz`, { hasRemote: true })).status).toBe(404);
+  });
+
   it('エラーは、コードに応じた状態で返る', async () => {
     const { request } = setup();
     const project = await request('POST', '/api/projects', { name: 'demo' });
@@ -81,7 +95,7 @@ describe('HTTP API', () => {
     expect(advance.operationId).toBe('advanceTicket');
 
     const operations = Object.values<any>(document.body.paths).flatMap((p) => Object.keys(p));
-    expect(operations).toHaveLength(31);
+    expect(operations).toHaveLength(32);
   });
 
   it('すべての操作を、HTTP API として提供する(operations.ts の対応表のとおり)', () => {

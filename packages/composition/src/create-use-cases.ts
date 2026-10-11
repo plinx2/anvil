@@ -53,6 +53,7 @@ import {
   StartTicket,
   SummarizeTicket,
   TransitionTicket,
+  UpdateRepo,
   UpdateTicket,
 } from '@anvil/usecase';
 import type { AnvilPorts } from './anvil-ports';
@@ -203,6 +204,7 @@ export function createUseCases(p: AnvilPorts) {
     endAgents,
   );
   const addRepo = new AddRepo(p.repos, p.projects, p.clock, findProject);
+  const updateRepo = new UpdateRepo(p.repos, p.projects, p.clock, findProject);
   const listProjects = new ListProjects(p.projects, p.repos, p.tickets);
   const getContextPages = new GetContextPages(p.context, findProject);
 
@@ -224,6 +226,7 @@ export function createUseCases(p: AnvilPorts) {
   return {
     addEntry,
     addRepo,
+    updateRepo,
     addDependency,
     advanceTicket,
     answerQuestion,

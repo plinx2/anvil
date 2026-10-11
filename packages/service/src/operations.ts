@@ -21,6 +21,7 @@ export const OPERATIONS: readonly Operation[] = [
   { id: 'projects.delete', summary: 'プロジェクトの削除', http: 'deleteProject', mcp: 'anvil_delete_project', cli: 'project delete' },
   { id: 'projects.list', summary: 'プロジェクトの一覧', http: 'listProjects', mcp: 'anvil_list_projects', cli: 'project list' },
   { id: 'projects.addRepo', summary: 'リポジトリの登録', http: 'addRepo', mcp: 'anvil_add_repo', cli: 'repo add' },
+  { id: 'projects.updateRepo', summary: 'リポジトリの更新', http: 'updateRepo', mcp: 'anvil_update_repo', cli: 'repo update' },
   {
     id: 'projects.contextPages',
     summary: 'プロジェクトコンテキストを読む',

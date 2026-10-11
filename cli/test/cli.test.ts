@@ -56,6 +56,24 @@ describe('anvil コマンド(citty。サーバーを使わず、直接実行す�
     expect(await run('project', 'list')).toMatch(/demo/);
   });
 
+  it('repo update は、指定したフラグの項目だけ更新する(--no-remote は false、フラグ無しは変えない)', async () => {
+    const { anvil, dir, run } = setup();
+    await run('project', 'create', 'demo');
+    await run('repo', 'add', '1', 'app', dir, '--remote');
+    const repoOf = async () => (await anvil.service.projects.list(newRequestContext(Actor.human()), {})).projects[0]?.repos[0];
+
+    await run('repo', 'update', '1', 'app', '--no-remote');
+    expect(await repoOf()).toMatchObject({ hasRemote: false, path: dir, defaultBranch: 'main' });
+
+    await run('repo', 'update', '1', 'app', '--branch', 'trunk');
+    expect(await repoOf()).toMatchObject({ hasRemote: false, path: dir, defaultBranch: 'trunk' });
+
+    await run('repo', 'update', '1', 'app', '--remote', '--path', `${dir}2`);
+    expect(await repoOf()).toMatchObject({ hasRemote: true, path: `${dir}2`, defaultBranch: 'trunk' });
+
+    await expect(run('repo', 'update', '1', 'app')).rejects.toMatchObject({ code: 'invalid' });
+  });
+
   it('すべての操作を、コマンドとして提供する(operations.ts の対応表のとおり)', () => {
     const { root } = setup();
     const expected = OPERATIONS.flatMap((o) => (o.cli ? [o.cli] : []));

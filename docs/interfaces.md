@@ -20,6 +20,7 @@ MCP ──┘
 | プロジェクトの削除 | `project delete` | `deleteProject` | `anvil_delete_project` |
 | プロジェクトの一覧 | `project list` | `listProjects` | `anvil_list_projects` |
 | リポジトリの登録 | `repo add` | `addRepo` | `anvil_add_repo` |
+| リポジトリの更新 | `repo update` | `updateRepo` | `anvil_update_repo` |
 | プロジェクトコンテキストを読む | `project context` | `getContextPages` | `anvil_get_context_pages` |
 | ダッシュボード | `dashboard` | `dashboard` | `anvil_dashboard` |
 | カンバン | `board` | `board` | `anvil_board` |
@@ -53,6 +54,14 @@ MCP ──┘
 
 - **消すもの**: チケット(エントリ、履歴、起動の記録、ブランチの記録、依存、振り返りを含む)、起票の依頼、リポジトリの登録、稼働中のエージェント、ワークツリー、プロジェクトコンテキスト、エージェントに渡した MCP の設定。他のプロジェクトのチケットからの依存も外れる。
 - **残すもの**: リポジトリそのもの(ローカルのパス)と、その中のブランチ。未マージの作業を失わないため。残したブランチは、結果と通知に出る。ワークツリーは、未コミットの変更も含めて消える。
+
+### リポジトリの更新
+
+`hasRemote`、`defaultBranch`、`path` のうち、指定した項目だけを更新する(名前は変えられない)。対象は、プロジェクトの番号とリポジトリの名前で指す。リモートの有無を変えると、完了時の動作(リモートなし: ローカルへ取り込み / あり: pull)と、PR の作成対象が切り替わる。
+
+- `path` は、実在の検証も、ワークツリーの移し替えもしない(`repo add` と同じ)。ブランチを切り済みのチケットがあるときに `path` を変えると、完了時のワークツリー削除が失敗しうる(通知され、処理は止まらない)。
+- `path` が他のリポジトリと重複するときは `conflict`。自分自身の現在の `path` の指定は通す。
+- 更新する項目を 1 つも指定しないと `invalid`。
 
 ### 例外: 振り返りの保存
 
