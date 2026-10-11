@@ -18,7 +18,7 @@ const ROLE_FILES: Readonly<Record<string, string>> = {
   pr_writer: 'pr-writer.md',
 };
 
-/** ロールの定義の置き場(ai-dev-team の docs)。 */
+/** ロールの定義の置き場(リポジトリの agents/ ディレクトリ)。 */
 export class FsRoleDefinitions implements RoleDefinitions {
   constructor(private readonly agentsDir: string) {}
 

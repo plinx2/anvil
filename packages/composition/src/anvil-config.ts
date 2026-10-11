@@ -16,7 +16,7 @@ export interface AnvilConfig {
   home: string;
   /** SQLite のファイル。':memory:' も可。既定は <home>/anvil.db */
   dbFile?: string;
-  /** ai-dev-team の docs(ロールの定義がある) */
+  /** リポジトリの agents/ ディレクトリ(ロールの定義がある) */
   agentsDir: string;
   /** エージェントが接続する、anvil の MCP の URL */
   mcpUrl: string;
