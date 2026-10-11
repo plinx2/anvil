@@ -29,7 +29,15 @@ export class CleanUpWorktrees implements UseCase<CleanUpWorktreesInput, CleanUpW
     for (const branch of await this.branches.list(ctx, ticket.id)) {
       const repo = repos.find((r) => r.name === branch.repoName);
       if (!repo) continue;
-      await this.git.removeWorktree(ctx, repo.path, branch.worktreePath).catch(() => undefined);
+      try {
+        await this.git.removeWorktree(ctx, repo.path, branch.worktreePath);
+      } catch (e) {
+        await this.notifier.notify(
+          ctx,
+          `T-${ticket.id} のワークツリーを削除できなかった`,
+          `${branch.worktreePath}: ${(e as Error).message}`,
+        );
+      }
 
       const outcome = repo.hasRemote
         ? await this.git.pullBase(ctx, repo.path, repo.defaultBranch)

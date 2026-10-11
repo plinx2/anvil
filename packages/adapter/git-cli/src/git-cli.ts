@@ -41,8 +41,12 @@ export class GitCli implements GitPort {
   }
 
   async removeWorktree(_ctx: RequestContext, repoPath: string, worktreePath: string): Promise<void> {
-    if (!fs.existsSync(worktreePath)) return;
-    await this.git(repoPath, ['worktree', 'remove', '--force', worktreePath]);
+    if (fs.existsSync(worktreePath)) {
+      await this.git(repoPath, ['worktree', 'remove', '--force', worktreePath]).catch(() => undefined);
+      // git が消しきれないことがある(Windows の node_modules など)。残骸は、ディレクトリごと消す
+      fs.rmSync(worktreePath, { recursive: true, force: true, maxRetries: 3, retryDelay: 200 });
+    }
+    await this.git(repoPath, ['worktree', 'prune']).catch(() => undefined);
     // ワークツリーは <worktrees>/<slug>/<リポジトリ名> に作られる。空になった <slug> も片付ける
     try {
       fs.rmdirSync(path.dirname(worktreePath));

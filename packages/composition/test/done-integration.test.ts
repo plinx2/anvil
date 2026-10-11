@@ -43,6 +43,22 @@ describe('完了時の、元のリポジトリへの反映', () => {
     expect(env.notifier.notifications).toEqual([]);
   });
 
+  it('git が消しきれないワークツリー(node_modules などの残骸)も、ディレクトリごと消す', async () => {
+    const env = await setup({ remote: false });
+    const { ticketId, worktree } = await workUntilDoneGate(env, 'feat/y', 'y.txt', 'y');
+    fs.mkdirSync(path.join(worktree, 'node_modules', '.pnpm'), { recursive: true });
+    fs.writeFileSync(path.join(worktree, 'node_modules', '.pnpm', 'big.js'), 'x');
+    fs.rmSync(path.join(worktree, '.git'), { force: true }); // git からは、ワークツリーとして扱えない状態にする
+
+    await env.s.flow.passDoneGate(human, { ticketId });
+
+    expect(fs.existsSync(worktree)).toBe(false);
+    expect(fs.existsSync(path.dirname(worktree))).toBe(false);
+    expect(git(env.repo, 'worktree', 'list', '--porcelain')).not.toContain(path.basename(path.dirname(worktree)));
+    expect(branchExists(env.repo, 'feat/y')).toBe(false); // 取り込みも、できている
+    expect(env.notifier.notifications).toEqual([]);
+  });
+
   it('リモートが無い: コンフリクトしたら、取り込みを中止し、ブランチを残して、人間に知らせる', async () => {
     const env = await setup({ remote: false });
     const { ticketId } = await workUntilDoneGate(env, 'feat/c', 'a.txt', 'branch side');
